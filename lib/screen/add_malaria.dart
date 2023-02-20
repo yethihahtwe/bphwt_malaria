@@ -1,3 +1,5 @@
+import 'package:bphwt/database/shared_pref_helper.dart';
+import 'package:bphwt/widgets/gender_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import '../database/database_helper.dart';
@@ -24,8 +26,17 @@ class _AddMalariaState extends State<AddMalaria> {
       medicineAmount,
       receivedRx,
       selectedJob,
-      selectedJobId,
-      otherJob;
+      otherJob,
+      remark;
+
+  // String to display
+  String userName = '';
+  String userState = '';
+  String userTspMimu = '';
+  String userTspEho = '';
+  String userArea = '';
+  String userRegion = '';
+  String userVil = '';
   DateTime? date;
 
   //String to display date in date picker button
@@ -70,6 +81,16 @@ class _AddMalariaState extends State<AddMalaria> {
   // Bool for other job visibility
   bool isOtherJob = false;
 
+  // Items for Job Dropdown
+  final jobListItems = [
+    'ရာဘာခြံလုပ်ငန်း',
+    'ဥယျာဉ်ခြံလုပ်ငန်း',
+    'ဆောက်လုပ်ရေးလုပ်ငန်း',
+    'တောတောင်နှင့်ဆက်စပ်သောလုပ်ငန်း',
+    'မိုင်းတွင်းလုပ်ငန်း',
+    'အခြားလုပ်ငန်း'
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -101,13 +122,28 @@ class _AddMalariaState extends State<AddMalaria> {
     this.yearList.add({"id": 11, "yearName": "2033"});
     this.yearList.add({"id": 12, "yearName": "2034"});
 
-    // Add values to Job List
-    this.jobList.add({"id": 1, "jobName": "ရာဘာခြံလုပ်ငန်း"});
-    this.jobList.add({"id": 2, "jobName": "ဥယျာဉ်ခြံလုပ်ငန်း"});
-    this.jobList.add({"id": 3, "jobName": "ဆောက်လုပ်ရေးလုပ်ငန်း"});
-    this.jobList.add({"id": 4, "jobName": "တောတောင်နှင့်ဆက်စပ်သောလုပ်ငန်း"});
-    this.jobList.add({"id": 5, "jobName": "မိုင်းတွင်းလုပ်ငန်းများ"});
-    this.jobList.add({"id": 6, "jobName": "အခြား"});
+    //Get values from Shared Preferences
+    //Get User Name if present
+    SharedPrefHelper.getUserName()
+        .then((name) => userName = name ?? 'Please update');
+    //Get User State if present
+    SharedPrefHelper.getUserState()
+        .then((state) => userState = state ?? 'Please update');
+    // Get User MIMU Township if present
+    SharedPrefHelper.getUserTspMimu()
+        .then((tspmimu) => userTspMimu = tspmimu ?? 'Please update');
+    // Get User EHO Township if present
+    SharedPrefHelper.getUserTspEho()
+        .then((tspeho) => userTspEho = tspeho ?? 'Please update');
+    // Get User Area if present
+    SharedPrefHelper.getUserArea()
+        .then((area) => userArea = area ?? 'Please update');
+    // Get User Region if present
+    SharedPrefHelper.getUserRegion()
+        .then((region) => userRegion = region ?? 'Please update');
+    // Get User MIMU Township if present
+    SharedPrefHelper.getUserVil()
+        .then((vil) => userVil = vil ?? 'Please update');
   }
 
   // Build Starts here
@@ -368,6 +404,7 @@ class _AddMalariaState extends State<AddMalaria> {
                               receivedRx = null;
                               isTravel = false;
                               selectedJob = null;
+                              isOtherJob = false;
                             })),
                   ),
                 ],
@@ -643,37 +680,22 @@ class _AddMalariaState extends State<AddMalaria> {
             // Start of Job Dropdown
             if (isRdtPositive) const Text('Occupation/ အလုပ်အကိုင်'),
             if (isRdtPositive)
-              FormHelper.dropDownWidget(
-                context,
-                "Select Occupation",
-                this.jobId,
-                this.jobList,
-                (onChangedVal) {
-                  this.jobId = onChangedVal;
-                  selectedJobId = onChangedVal;
-                  selectedJob = jobList
-                      .where((job) => job["id"].toString() == onChangedVal)
-                      .first["jobName"]
-                      .toString();
-                  setState(() {});
-                },
-                (onValidateVal) {
-                  if (onValidateVal == null) {
-                    return 'Please select Occupation';
-                  }
-                  return null;
-                },
-                borderColor: Colors.grey,
-                borderFocusColor: Theme.of(context).primaryColor,
-                borderRadius: 5,
-                borderWidth: 0.1,
-                contentPadding: 10,
-                showPrefixIcon: true,
-                prefixIcon: const Icon(Icons.factory),
-                prefixIconColor: Colors.grey,
-                prefixIconPaddingLeft: 10.0,
-                optionValue: "id",
-                optionLabel: "jobName",
+              Container(
+                height: 50.0,
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: DropdownButtonFormField<String>(
+                  value: selectedJob,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.factory),
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.only(top: 5, bottom: 5)),
+                  hint: const Text('Please select occupation'),
+                  items: jobListItems.map(buildJobListMenuItem).toList(),
+                  onChanged: (value) => setState(() {
+                    selectedJob = value;
+                    isOtherJob = value == 'အခြားလုပ်ငန်း';
+                  }),
+                ),
               ),
             if (isOtherJob) const Text('Other occupation/ အခြားလုပ်ငန်း'),
             if (isOtherJob)
@@ -692,6 +714,7 @@ class _AddMalariaState extends State<AddMalaria> {
                     otherJob = str;
                   },
                   decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.factory_outlined),
                       hintText: 'Enter Other Occupation',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.only(top: 5, bottom: 5)),
@@ -699,6 +722,41 @@ class _AddMalariaState extends State<AddMalaria> {
               ),
 
             if (isRdtPositive) const Divider(),
+            // Start of Remark Text Field
+            if (isRdtPositive) const Text('Remark/ မှတ်ချက်'),
+            if (isRdtPositive)
+              Container(
+                height: 100,
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: TextFormField(
+                  style: const TextStyle(fontSize: 15),
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.note),
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter remark if any',
+                  ),
+                  onSaved: (str) {
+                    remark = str;
+                  },
+                ),
+              ),
+
+            // Start of User Profile Information
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Expanded(
+                          flex: 1, child: Text('စေတနာ့ဝန်ထမ်းအမည်: ')),
+                      Expanded(flex: 1, child: Text(userName))
+                    ],
+                  )
+                ],
+              ),
+            ),
 
             // Start of Save Button
             ElevatedButton.icon(
@@ -715,8 +773,13 @@ class _AddMalariaState extends State<AddMalaria> {
                     Navigator.pop(context, 'success');
                   }
                 },
+                style:
+                    ElevatedButton.styleFrom(minimumSize: const Size(100, 50)),
                 icon: const Icon(Icons.save),
-                label: const Text('Save'))
+                label: const Text(
+                  'Save',
+                  style: TextStyle(fontSize: 16),
+                ))
           ],
         ),
       ),
@@ -736,9 +799,12 @@ class _AddMalariaState extends State<AddMalaria> {
     });
   }
 
-  Future showOtherJob(BuildContext context) async {
-    if (selectedJobId == '6') {
-      isOtherJob = true;
-    }
-  }
+  DropdownMenuItem<String> buildJobListMenuItem(String item) =>
+      DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: const TextStyle(fontSize: 15),
+        ),
+      );
 }
