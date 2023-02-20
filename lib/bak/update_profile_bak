@@ -1,0 +1,229 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import '../database/database_helper.dart';
+import '../model/malaria.dart';
+
+class UpdateProfile extends StatefulWidget {
+  final int usr_id;
+  final String usr_name;
+  final String usr_state;
+  final String usr_tsp_mimu;
+  final String usr_tsp_eho;
+  final String usr_area;
+  final String usr_act;
+  final String usr_vil;
+  const UpdateProfile(
+      {required this.usr_id,
+      required this.usr_name,
+      required this.usr_state,
+      required this.usr_tsp_mimu,
+      required this.usr_tsp_eho,
+      required this.usr_area,
+      required this.usr_act,
+      required this.usr_vil});
+
+  @override
+  State<UpdateProfile> createState() => _UpdateProfileState();
+}
+
+class _UpdateProfileState extends State<UpdateProfile> {
+  int? usr_id;
+  String? usr_name,
+      usr_state,
+      usr_tsp_mimu,
+      usr_tsp_eho,
+      usr_area,
+      usr_act,
+      usr_vil;
+  GlobalKey<FormState> _key = GlobalKey();
+  @override
+  void initState() {
+    super.initState();
+    usr_id = widget.usr_id;
+    usr_name = widget.usr_name;
+    usr_state = widget.usr_state;
+    usr_tsp_mimu = widget.usr_tsp_mimu;
+    usr_tsp_eho = widget.usr_tsp_eho;
+    usr_area = widget.usr_area;
+    usr_act = widget.usr_act;
+    usr_vil = widget.usr_vil;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Update Profile Information'),
+          centerTitle: true,
+        ),
+        body: Form(
+            key: _key,
+            child: ListView(
+              padding: const EdgeInsets.all(15),
+              children: [
+                const Text('User Name:'),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  validator: (str) {
+                    if (str == null || str.isEmpty) {
+                      return 'Please enter user name';
+                    }
+                    return null;
+                  },
+                  onSaved: (str) {
+                    usr_name = str;
+                  },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.person),
+                    hintText: 'Enter user name',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const Text('State/Division:'),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  validator: (str) {
+                    if (str == null || str.isEmpty) {
+                      return 'Please enter state/division';
+                    }
+                    return null;
+                  },
+                  onSaved: (str) {
+                    usr_state = str;
+                  },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.numbers),
+                    hintText: 'Enter state/division',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const Text('MIMU Township:'),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  validator: (str) {
+                    if (str == null || str.isEmpty) {
+                      return 'Please enter MIMU township';
+                    }
+                    return null;
+                  },
+                  onSaved: (str) {
+                    usr_tsp_mimu = str;
+                  },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.numbers),
+                    hintText: 'Enter mimu township',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const Text('EHO Township:'),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  validator: (str) {
+                    if (str == null || str.isEmpty) {
+                      return 'Please enter EHO township';
+                    }
+                    return null;
+                  },
+                  onSaved: (str) {
+                    usr_tsp_eho = str;
+                  },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.numbers),
+                    hintText: 'Enter mimu township',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const Text('Area:'),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  validator: (str) {
+                    if (str == null || str.isEmpty) {
+                      return 'Please enter area';
+                    }
+                    return null;
+                  },
+                  onSaved: (str) {
+                    usr_area = str;
+                  },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.numbers),
+                    hintText: 'Enter area',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const Text('Activity:'),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  validator: (str) {
+                    if (str == null || str.isEmpty) {
+                      return 'Please enter activity';
+                    }
+                    return null;
+                  },
+                  onSaved: (str) {
+                    usr_act = str;
+                  },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.numbers),
+                    hintText: 'Enter activity',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const Text('Village:'),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  validator: (str) {
+                    if (str == null || str.isEmpty) {
+                      return 'Please enter village';
+                    }
+                    return null;
+                  },
+                  onSaved: (str) {
+                    usr_vil = str;
+                  },
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.numbers),
+                    hintText: 'Enter village',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      if (_key.currentState != null &&
+                          _key.currentState!.validate()) {
+                        _key.currentState?.save();
+                        int result = await DatabaseHelper().updateUserProfile(
+                            UserProfile.insertUserProfile(
+                                usr_name: usr_name ?? '',
+                                usr_state: usr_state ?? '',
+                                usr_tsp_mimu: usr_tsp_mimu ?? '',
+                                usr_tsp_eho: usr_tsp_eho ?? '',
+                                usr_area: usr_area ?? '',
+                                usr_act: usr_act ?? '',
+                                usr_vil: usr_vil ?? ''),
+                            usr_id!);
+                        print(result);
+                        Navigator.pop(context, 'success');
+                      }
+                    },
+                    icon: const Icon(Icons.save),
+                    label: const Text('Save'))
+              ],
+            )));
+  }
+}

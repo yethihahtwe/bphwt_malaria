@@ -1,0 +1,84 @@
+import 'package:bphwt/model/malaria.dart';
+import 'package:bphwt/screen/update_malaria.dart';
+import 'package:bphwt/screen/update_profile.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../database/database_helper.dart';
+
+class MenuDrawer extends StatelessWidget {
+  const MenuDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: Colors.grey[300],
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: Column(
+                children: [
+                  Text(
+                    'Menu',
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        textStyle: TextStyle(color: Colors.white)),
+                  ),
+                  Container(
+                      width: 200.0,
+                      height: 95.0,
+                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(3.0),
+                      ),
+                      child: Image.asset('assets/images/logo.png')),
+                ],
+              ),
+            ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.blueGrey, Color.fromARGB(255, 50, 65, 71)],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight),
+            ),
+          ),
+          ListTile(
+            title: Container(
+                height: 50.0,
+                padding: EdgeInsets.all(10.0),
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 3.0,
+                          offset: Offset(0.0, 1.0))
+                    ]),
+                child: Card(child: Text('User Profile'))),
+            onTap: () async {
+              Map<String, dynamic>? userProfile = await getUserProfile();
+              var result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => UpdateProfile(
+                            usr_id: userProfile?['usr_id'],
+                            usr_name: userProfile?['usr_name'],
+                            usr_state: userProfile?['usr_state'],
+                            usr_tsp_mimu: userProfile?['usr_tsp_mimu'],
+                            usr_tsp_eho: userProfile?['usr_tsp_eho'],
+                            usr_area: userProfile?['usr_area'],
+                            usr_act: userProfile?['usr_act'],
+                            usr_vil: userProfile?['usr_vil'],
+                          )));
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
