@@ -117,7 +117,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                             fontWeight: FontWeight.bold,
                           )),
                     ),
-                    Expanded(flex: 1, child: Text(_userName)),
+                    Container(child: Text(_userName)),
                   ],
                 ),
                 const SizedBox(

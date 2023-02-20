@@ -124,26 +124,48 @@ class _AddMalariaState extends State<AddMalaria> {
 
     //Get values from Shared Preferences
     //Get User Name if present
-    SharedPrefHelper.getUserName()
-        .then((name) => userName = name ?? 'Please update');
-    //Get User State if present
-    SharedPrefHelper.getUserState()
-        .then((state) => userState = state ?? 'Please update');
+    // Get User Name if present
+    SharedPrefHelper.getUserName().then((name) {
+      setState(() {
+        userName = name ?? 'Please Update';
+      });
+    });
+    // Get User State if present
+    SharedPrefHelper.getUserState().then((state) {
+      setState(() {
+        userState = state ?? 'Please Update';
+      });
+    });
     // Get User MIMU Township if present
-    SharedPrefHelper.getUserTspMimu()
-        .then((tspmimu) => userTspMimu = tspmimu ?? 'Please update');
+    SharedPrefHelper.getUserTspMimu().then((tspmimu) {
+      setState(() {
+        userTspMimu = tspmimu ?? 'Please Update';
+      });
+    });
     // Get User EHO Township if present
-    SharedPrefHelper.getUserTspEho()
-        .then((tspeho) => userTspEho = tspeho ?? 'Please update');
+    SharedPrefHelper.getUserTspEho().then((tspeho) {
+      setState(() {
+        userTspEho = tspeho ?? 'Please Update';
+      });
+    });
     // Get User Area if present
-    SharedPrefHelper.getUserArea()
-        .then((area) => userArea = area ?? 'Please update');
+    SharedPrefHelper.getUserArea().then((area) {
+      setState(() {
+        userArea = area ?? 'Please Update';
+      });
+    });
     // Get User Region if present
-    SharedPrefHelper.getUserRegion()
-        .then((region) => userRegion = region ?? 'Please update');
-    // Get User MIMU Township if present
-    SharedPrefHelper.getUserVil()
-        .then((vil) => userVil = vil ?? 'Please update');
+    SharedPrefHelper.getUserRegion().then((region) {
+      setState(() {
+        userRegion = region ?? 'Please Update';
+      });
+    });
+    // Get User Village if present
+    SharedPrefHelper.getUserVil().then((vil) {
+      setState(() {
+        userVil = vil ?? 'Please Update';
+      });
+    });
   }
 
   // Build Starts here
@@ -742,6 +764,7 @@ class _AddMalariaState extends State<AddMalaria> {
               ),
 
             // Start of User Profile Information
+            const Divider(),
             Container(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
@@ -750,10 +773,74 @@ class _AddMalariaState extends State<AddMalaria> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Expanded(
-                          flex: 1, child: Text('စေတနာ့ဝန်ထမ်းအမည်: ')),
-                      Expanded(flex: 1, child: Text(userName))
+                          flex: 1,
+                          child: Text(
+                            'စေတနာ့ဝန်ထမ်းအမည်: ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Expanded(child: Text(userName))
                     ],
-                  )
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'MIMU မြို့နယ်: ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Expanded(child: Text(userTspMimu))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'EHO မြို့နယ်: ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Expanded(child: Text(userTspEho))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ဧရိယာအမည်: ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Expanded(child: Text(userArea))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'လှုပ်ရှားဒေသအမည်: ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Expanded(child: Text(userRegion))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ကျေးရွာ: ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Expanded(child: Text(userVil))
+                    ],
+                  ),
                 ],
               ),
             ),
