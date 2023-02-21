@@ -35,36 +35,7 @@ class DatabaseHelper {
 //SELECT * FROM MALARIA TABLE
   Future<List<Map<String, dynamic>>> getAllMalaria() async {
     _db = await _createDatabase();
-    return await _db.query(malariaTable, columns: [
-      'id',
-      'rx_month',
-      'rx_year',
-      'test_date',
-      'name',
-      'age',
-      'address',
-      'sex',
-      'pregnancy',
-      'rdt_bool',
-      'rdt_pos_result',
-      'symptom',
-      'medicine',
-      'medicine_amount',
-      'refer',
-      'death',
-      'receive_rx',
-      'travel',
-      'job',
-      'other_job',
-      'remark',
-      'state',
-      'tsp_mimu',
-      'tsp_eho',
-      'area',
-      'region',
-      'vil',
-      'usr_name'
-    ]);
+    return await _db.query(malariaTable, columns: []);
   }
 
 //UPDATE MALARIA TABLE

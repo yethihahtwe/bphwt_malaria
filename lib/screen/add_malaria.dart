@@ -1,5 +1,4 @@
 import 'package:bphwt/database/shared_pref_helper.dart';
-import 'package:bphwt/widgets/gender_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import '../database/database_helper.dart';
@@ -46,6 +45,16 @@ class _AddMalariaState extends State<AddMalaria> {
     } else {
       return '${date!.day}-${date!.month}-${date!.year}';
     }
+  }
+
+  // String to convert date format to mm/dd/yy
+  String saveDateText() {
+    if (date == null) {
+      return '';
+    } else {
+      return '${date!.day}-${date!.month}-${date!.year}';
+    }
+    ;
   }
 
   //List variable for dropdowns
@@ -213,7 +222,7 @@ class _AddMalariaState extends State<AddMalaria> {
                 optionValue: "id",
                 optionLabel: "mthName"),
 
-            Divider(),
+            const Divider(),
 
             // Start of Treatment Year
             const Text('Year of Treatment/ဆေးကုသမှုပေးသည့် ခုနှစ်'),
@@ -853,9 +862,32 @@ class _AddMalariaState extends State<AddMalaria> {
                     _key.currentState?.save();
                     int id = await DatabaseHelper().insertMalaria(
                         Malaria.insertMalaria(
+                            rxMonth: selectedMonth ?? '',
+                            rxYear: selectedYear ?? '',
+                            testDate: saveDateText(),
                             name: name ?? '',
                             age: age ?? '',
-                            sex: selectedGender));
+                            address: address ?? '',
+                            sex: selectedGender,
+                            pregnancy: isPregnancy.toString(),
+                            rdtBool: isRdtPositive.toString(),
+                            rdtPosResult: rdtResult,
+                            symptom: symptomType ?? '',
+                            medicine: medicine ?? '',
+                            medicineAmount: medicineAmount ?? '',
+                            refer: isReferred.toString(),
+                            death: isDeath.toString(),
+                            receiveRx: receivedRx ?? '',
+                            travel: isTravel.toString(),
+                            job: selectedJob ?? '',
+                            remark: remark ?? '',
+                            state: userState,
+                            tspMimu: userTspMimu,
+                            tspEho: userTspEho,
+                            area: userArea,
+                            region: userRegion,
+                            vil: userVil,
+                            usrName: userName));
                     print(id);
                     Navigator.pop(context, 'success');
                   }

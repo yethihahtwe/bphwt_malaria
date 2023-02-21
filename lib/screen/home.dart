@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
           Column(mainAxisAlignment: MainAxisAlignment.end, children: [
         FloatingActionButton(
           heroTag: "btnSync",
-          backgroundColor: Colors.blueGrey,
+          // backgroundColor: Colors.blueGrey,
           onPressed: () async {
             if (await SynchronizationData.isInternet()) {
               List<Map<String, dynamic>> data =
@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
         // Start of Add FAB
         FloatingActionButton(
           heroTag: "btnAdd",
-          backgroundColor: Colors.blueGrey,
+          // backgroundColor: Colors.blueGrey,
           onPressed: () async {
             var result = await Navigator.push(
                 context,
@@ -85,19 +85,20 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'BPHWT Malaria Report',
-          style: GoogleFonts.poppins(),
+          'BPHWT Malaria Case Register',
+          style: GoogleFonts.poppins(
+              textStyle: const TextStyle(color: Colors.white, fontSize: 16)),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Colors.blueGrey, Color.fromARGB(255, 50, 65, 71)],
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight),
-          ),
-        ),
+        // backgroundColor: Colors.transparent,
+        // flexibleSpace: Container(
+        //   decoration: const BoxDecoration(
+        //     gradient: LinearGradient(
+        //         colors: [Colors.blueGrey, Color.fromARGB(255, 50, 65, 71)],
+        //         begin: Alignment.bottomLeft,
+        //         end: Alignment.topRight),
+        //   ),
+        // ),
       ),
       body: FutureBuilder<List<Map>>(
         future: DatabaseHelper().getAllMalaria(),
@@ -153,6 +154,7 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                   height: MediaQuery.of(context).size.height * 0.7,
+                  width: MediaQuery.of(context).size.width * 0.95,
                   // Start of Malaria Record List View
                   child: ListView.builder(
                     itemCount: snapshot.data?.length ?? 0,
@@ -170,26 +172,44 @@ class _HomeState extends State<Home> {
                                 width: 1.0,
                               ))),
                           child: ListTile(
+                            minLeadingWidth: 1,
                             title: Row(
                               children: [
                                 Expanded(
-                                  flex: 1,
-                                  child: Text(malaria?['name']),
+                                  flex: 2,
+                                  child: Text(
+                                    malaria?['name'],
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
                                 ),
                                 Expanded(
                                   flex: 1,
-                                  child: Text(malaria?['age'] + ' yrs'),
+                                  child: Text(
+                                    malaria?['age'] + ' yrs',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
                                 ),
                                 Expanded(
                                   flex: 1,
-                                  child: Text(malaria?['sex']),
+                                  child: Text(
+                                    malaria?['sex'],
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    malaria?['test_date'],
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
                                 )
                               ],
                             ),
 
                             // Go to Detail Button
                             leading: IconButton(
-                              icon: const Icon(Icons.play_circle_filled),
+                              iconSize: 15,
+                              icon: const Icon(Icons.arrow_forward_ios_rounded),
                               onPressed: () async {
                                 var result = await Navigator.push(
                                     context,
