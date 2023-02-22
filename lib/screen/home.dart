@@ -107,37 +107,37 @@ class _HomeState extends State<Home> {
             return Column(
               children: [
                 Container(
-                  height: 50,
-                  margin:
-                      const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
+                  width: double.infinity,
+                  height: 30,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                      ),
                       Expanded(
-                        flex: 1,
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 20.0),
-                          child: Text(
-                            'Name',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold),
-                          ),
+                        flex: 2,
+                        child: Text(
+                          'Name',
+                          style: GoogleFonts.poppins(
+                              fontSize: 11, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Expanded(
                           flex: 1,
                           child: Text('Age',
                               style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold))),
+                                  fontSize: 11, fontWeight: FontWeight.bold))),
                       Expanded(
                           flex: 1,
                           child: Text('Gender',
                               style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold))),
+                                  fontSize: 11, fontWeight: FontWeight.bold))),
                       Expanded(
-                          flex: 1,
-                          child: Text('Date',
+                          flex: 2,
+                          child: Text('RDT Date',
                               style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold)))
+                                  fontSize: 11, fontWeight: FontWeight.bold)))
                     ],
                   ),
                 ),
@@ -153,7 +153,7 @@ class _HomeState extends State<Home> {
                       )
                     ],
                   ),
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.72,
                   width: MediaQuery.of(context).size.width * 0.95,
                   // Start of Malaria Record List View
                   child: ListView.builder(
@@ -161,70 +161,103 @@ class _HomeState extends State<Home> {
                     itemBuilder: (context, index) {
                       Map? malaria = snapshot.data?[index];
                       return Container(
-                        margin: const EdgeInsets.only(left: 16.0, right: 16.0),
                         // Start of Each Record
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              border: Border(
-                                  bottom: BorderSide(
-                                color: Color.fromARGB(255, 225, 225, 225),
-                                width: 1.0,
-                              ))),
-                          child: ListTile(
-                            minLeadingWidth: 1,
-                            title: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    malaria?['name'],
-                                    style: const TextStyle(fontSize: 12),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 40,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: IconButton(
+                                      iconSize: 15,
+                                      icon: const Icon(
+                                          Icons.arrow_forward_ios_rounded),
+                                      onPressed: () async {
+                                        var result = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => MalariaDetail(
+                                                    id: malaria?['id'],
+                                                    rxMonth:
+                                                        malaria?['rx_month'],
+                                                    rxYear: malaria?['rx_year'],
+                                                    testDate:
+                                                        malaria?['test_date'],
+                                                    name: malaria?['name'],
+                                                    age: malaria?['age'],
+                                                    address:
+                                                        malaria?['address'],
+                                                    sex: malaria?['sex'],
+                                                    pregnancy:
+                                                        malaria?['pregnancy'],
+                                                    rdtBool:
+                                                        malaria?['rdt_bool'],
+                                                    rdtPosResult: malaria?[
+                                                        'rdt_pos_result'],
+                                                    symptom:
+                                                        malaria?['symptom'],
+                                                    medicine:
+                                                        malaria?['medicine'],
+                                                    medicineAmount: malaria?[
+                                                        'medicine_amount'],
+                                                    refer: malaria?['refer'],
+                                                    death: malaria?['death'],
+                                                    receiveRx:
+                                                        malaria?['receive_rx'],
+                                                    travel: malaria?['travel'],
+                                                    job: malaria?['job'],
+                                                    remark: malaria?['remark'],
+                                                    state: malaria?['state'],
+                                                    tspMimu:
+                                                        malaria?['tsp_mimu'],
+                                                    tspEho: malaria?['tsp_eho'],
+                                                    area: malaria?['area'],
+                                                    region: malaria?['region'],
+                                                    vil: malaria?['vil'],
+                                                    usrName:
+                                                        malaria?['usr_name'])));
+                                        if (result == 'success') {
+                                          setState(() {});
+                                        }
+                                      },
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    malaria?['age'] + ' yrs',
-                                    style: const TextStyle(fontSize: 12),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      malaria?['name'],
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    malaria?['sex'],
-                                    style: const TextStyle(fontSize: 12),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      malaria?['age'] + ' yrs',
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    malaria?['test_date'],
-                                    style: const TextStyle(fontSize: 12),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      malaria?['sex'],
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
                                   ),
-                                )
-                              ],
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      malaria?['test_date'],
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-
-                            // Go to Detail Button
-                            leading: IconButton(
-                              iconSize: 15,
-                              icon: const Icon(Icons.arrow_forward_ios_rounded),
-                              onPressed: () async {
-                                var result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => MalariaDetail(
-                                            id: malaria?['id'],
-                                            name: malaria?['name'],
-                                            age: malaria?['age'],
-                                            sex: malaria?['sex'])));
-                                if (result == 'success') {
-                                  setState(() {});
-                                }
-                              },
-                            ),
-                          ),
+                            const Divider()
+                          ],
                         ),
                       );
                     },
