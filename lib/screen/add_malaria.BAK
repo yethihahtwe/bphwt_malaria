@@ -1,0 +1,302 @@
+
+
+class AddMalaria extends StatefulWidget {
+  const AddMalaria({super.key});
+
+  @override
+  State<AddMalaria> createState() => _AddMalariaState();
+}
+
+class _AddMalariaState extends State<AddMalaria> {
+  
+  
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        // Start of Appbar
+        
+        body: Form(
+          key: _key,
+          child: ListView(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+            children: [
+              
+              
+              
+
+              
+
+              
+              
+
+              
+              
+
+              
+              
+
+              
+              
+
+              
+              
+
+              
+              Container(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                height: 50,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    
+                    
+                
+                    
+                    Container(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      height: 50,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            child: 
+                          ),
+                          
+                          
+                        ],
+                      ),
+                    ),
+
+                    // Start of RDT
+
+                    //       // Start of RDT Positive Result
+                    //       if (isRdtPositive)
+                    //         ListView(
+                    //           physics: const NeverScrollableScrollPhysics(),
+                    //           children: [
+                                
+                                
+                                
+
+                               
+                    //             // Start of Treatment
+                    //             const Divider(),
+                               
+                                
+                    //             
+                    //             // Start of Referred Checkbox
+                    //             CheckboxListTile(
+                    //               controlAffinity: ListTileControlAffinity.leading,
+                    //               title: const Text(
+                    //                   'Patient referred with Malaria\nဆေးရုံဆေးခန်းလွှဲပြောင်းငှက်ဖျားလူနာ'),
+                    //               value: isReferred,
+                    //               onChanged: (referred) => setState(() {
+                    //                 isReferred = referred!;
+                    //               }),
+                    //             ),
+                    //             const Divider(),
+                    //             // Start of death checkbox
+                    //             CheckboxListTile(
+                    //               controlAffinity: ListTileControlAffinity.leading,
+                    //               title: const Text(
+                    //                   'Expired with RDT Positive\nငှက်ဖျားပိုးတွေ့သေဆုံး'),
+                    //               value: isDeath,
+                    //               onChanged: (death) => setState(() {
+                    //                 isDeath = death!;
+                    //               }),
+                    //             ),
+                    //             const Divider(),
+                    //             // Start of Treatment
+                    //             const Text(
+                    //                 'Received treatment since/ ဆေးကုသမှုခံယူခြင်း'),
+                    //             RadioListTile(
+                    //                 value: 'Within-24hr',
+                    //                 groupValue: receivedRx,
+                    //                 title: const Text(
+                    //                     'Within 24hr of fever\nဖျားပြီး(၂၄)နာရီအတွင်း'),
+                    //                 onChanged: (receive) => setState(() {
+                    //                       receivedRx = receive!;
+                    //                     })),
+                    //             RadioListTile(
+                    //                 value: 'After-24hr',
+                    //                 groupValue: receivedRx,
+                    //                 title: const Text(
+                    //                     'After 24hr of fever\nဖျားပြီး(၂၄)နာရီကျော်'),
+                    //                 onChanged: (receive) => setState(() {
+                    //                       receivedRx = receive!;
+                    //                     })),
+                    //             const Divider(),
+                    //             // Start of Travelling history Checkbox
+                    //             CheckboxListTile(
+                    //               controlAffinity: ListTileControlAffinity.leading,
+                    //               title: const Text(
+                    //                   'Travelling 2week-1month before\n(၂)ပတ်မှ(၁)လအတွင်းခရီးသွားထားခြင်း'),
+                    //               value: isTravel,
+                    //               onChanged: (travel) => setState(() {
+                    //                 isTravel = travel!;
+                    //               }),
+                    //             ),
+                    //             const Divider(),
+                    //             // Start of Job Dropdown
+                    //             const Text('Occupation/ အလုပ်အကိုင်'),
+                    //             DropdownButtonFormField<String>(
+                    //               value: selectedJob,
+                    //               decoration: const InputDecoration(
+                    //                   prefixIcon: Icon(Icons.factory),
+                    //                   border: OutlineInputBorder(),
+                    //                   contentPadding:
+                    //                       EdgeInsets.only(top: 5, bottom: 5)),
+                    //               hint: const Text('Please select occupation'),
+                    //               items:
+                    //                   jobListItems.map(buildJobListMenuItem).toList(),
+                    //               onChanged: (value) => setState(() {
+                    //                 selectedJob = value;
+                    //                 isOtherJob = value == 'အခြားလုပ်ငန်း';
+                    //               }),
+                    //             ),
+                    //             if (isOtherJob)
+                    //               const Text('Other occupation/ အခြားလုပ်ငန်း'),
+                    //             if (isOtherJob)
+                    //               Container(
+                    //                 height: 50.0,
+                    //                 padding: const EdgeInsets.only(left: 20, right: 20),
+                    //                 child: TextFormField(
+                    //                   style: const TextStyle(fontSize: 15),
+                    //                   validator: (enteredJob) {
+                    //                     if (enteredJob == null || enteredJob.isEmpty) {
+                    //                       return 'Please Enter Occupation';
+                    //                     }
+                    //                     return null;
+                    //                   },
+                    //                   onSaved: (enteredJob) {
+                    //                     otherJob = enteredJob;
+                    //                   },
+                    //                   decoration: const InputDecoration(
+                    //                       prefixIcon: Icon(Icons.factory_outlined),
+                    //                       hintText: 'Enter Other Occupation',
+                    //                       border: OutlineInputBorder(),
+                    //                       contentPadding:
+                    //                           EdgeInsets.only(top: 5, bottom: 5)),
+                    //                 ),
+                    //               ),
+                    //             const Divider(),
+                    //             // Start of Remark Text Field
+                    //             const Text('Remark/ မှတ်ချက်'),
+                    //             TextFormField(
+                    //               style: const TextStyle(fontSize: 15),
+                    //               decoration: const InputDecoration(
+                    //                 prefixIcon: Icon(Icons.note),
+                    //                 border: OutlineInputBorder(),
+                    //                 hintText: 'Enter remark if any',
+                    //               ),
+                    //               onSaved: (enteredRemark) {
+                    //                 setState(() {
+                    //                   remark = enteredRemark;
+                    //                 });
+                    //               },
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       // Start of User Profile Information
+                    //       const Divider(),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           const Expanded(
+                    //               flex: 1,
+                    //               child: Text(
+                    //                 'စေတနာ့ဝန်ထမ်းအမည်: ',
+                    //                 style: TextStyle(fontWeight: FontWeight.bold),
+                    //               )),
+                    //           Expanded(child: Text(userName))
+                    //         ],
+                    //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           const Expanded(
+                    //               flex: 1,
+                    //               child: Text(
+                    //                 'MIMU မြို့နယ်: ',
+                    //                 style: TextStyle(fontWeight: FontWeight.bold),
+                    //               )),
+                    //           Expanded(child: Text(userTspMimu))
+                    //         ],
+                    //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           const Expanded(
+                    //               flex: 1,
+                    //               child: Text(
+                    //                 'EHO မြို့နယ်: ',
+                    //                 style: TextStyle(fontWeight: FontWeight.bold),
+                    //               )),
+                    //           Expanded(child: Text(userTspEho))
+                    //         ],
+                    //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           const Expanded(
+                    //               flex: 1,
+                    //               child: Text(
+                    //                 'ဧရိယာအမည်: ',
+                    //                 style: TextStyle(fontWeight: FontWeight.bold),
+                    //               )),
+                    //           Expanded(child: Text(userArea))
+                    //         ],
+                    //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           const Expanded(
+                    //               flex: 1,
+                    //               child: Text(
+                    //                 'လှုပ်ရှားဒေသအမည်: ',
+                    //                 style: TextStyle(fontWeight: FontWeight.bold),
+                    //               )),
+                    //           Expanded(child: Text(userRegion))
+                    //         ],
+                    //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           const Expanded(
+                    //               flex: 1,
+                    //               child: Text(
+                    //                 'ကျေးရွာ: ',
+                    //                 style: TextStyle(fontWeight: FontWeight.bold),
+                    //               )),
+                    //           Expanded(child: Text(userVil))
+                    //         ],
+                    //       ),
+
+                    //     ],
+                    //   ),
+                    // ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+
+  
+
+  
+}

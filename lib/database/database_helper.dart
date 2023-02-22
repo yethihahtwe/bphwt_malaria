@@ -35,7 +35,8 @@ class DatabaseHelper {
 //SELECT * FROM MALARIA TABLE
   Future<List<Map<String, dynamic>>> getAllMalaria() async {
     _db = await _createDatabase();
-    return await _db.query(malariaTable, columns: []);
+    // return await _db.query(malariaTable, columns: []);
+    return await _db.rawQuery('SELECT * from $malariaTable ORDER BY id desc');
   }
 
 //UPDATE MALARIA TABLE
