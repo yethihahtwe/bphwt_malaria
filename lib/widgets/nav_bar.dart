@@ -19,8 +19,8 @@ class BottomNavigation extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(Icons.school),
+            label: 'Guide',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

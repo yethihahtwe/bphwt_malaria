@@ -51,10 +51,18 @@ dependencies:
   snippet_coder_utils: ^1.0.13
   internet_connection_checker: ^1.0.0+1
   flutter_easyloading: ^3.0.5
+  uuid: ^3.0.7
+  flutter_launcher_icons: ^0.11.0
+  change_app_package_name: ^1.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

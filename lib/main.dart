@@ -3,7 +3,6 @@ import 'package:bphwt/screen/profile_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +17,8 @@ class MalariaApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => Home(),
-        'profile_detail': (context) => ProfileDetail(),
+        '/': (context) => const Home(),
+        'profile_detail': (context) => const ProfileDetail(),
       },
       theme: ThemeData(
           textTheme: GoogleFonts.robotoTextTheme(

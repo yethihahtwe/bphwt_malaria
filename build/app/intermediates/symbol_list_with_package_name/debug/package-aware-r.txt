@@ -1,4 +1,4 @@
-com.example.bphwt
+org.bphwt.backpackcr
 attr activityAction
 attr activityName
 attr alpha

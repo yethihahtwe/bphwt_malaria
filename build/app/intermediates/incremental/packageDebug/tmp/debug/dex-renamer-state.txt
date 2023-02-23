@@ -1,4 +1,4 @@
-#Wed Feb 22 21:42:11 ICT 2023
-base.0=/Users/yethihahtwe/repos/bphwt_malaria/bphwt_malaria/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+#Thu Feb 23 17:12:09 ICT 2023
+base.0=/Users/yethihahtwe/dev/bphwt_malaria/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

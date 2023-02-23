@@ -2,6 +2,7 @@ import 'package:bphwt/database/shared_pref_helper.dart';
 import 'package:bphwt/screen/update_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/nav_bar.dart';
@@ -15,6 +16,7 @@ class ProfileDetail extends StatefulWidget {
 
 class _ProfileDetailState extends State<ProfileDetail> {
   // String to display value to widget
+  String _userId = '';
   String _userName = '';
   String _userState = '';
   String _userTspMimu = '';
@@ -30,6 +32,12 @@ class _ProfileDetailState extends State<ProfileDetail> {
   void initState() {
     super.initState();
     // Get Values from Shared Preferences
+    // Get User Name if present
+    SharedPrefHelper.getUserId().then((id) {
+      setState(() {
+        _userId = id ?? '';
+      });
+    });
     // Get User Name if present
     SharedPrefHelper.getUserName().then((name) {
       setState(() {
@@ -89,7 +97,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('User Profile'),
+        title: const Text('User Profile'),
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         const SizedBox(
@@ -97,8 +105,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
         ),
         Center(
           child: Container(
-              width: 200.0,
-              height: 150.0,
+              width: 100.0,
+              height: 100.0,
               alignment: Alignment.topCenter,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -118,10 +126,27 @@ class _ProfileDetailState extends State<ProfileDetail> {
           child: Container(
             // width: MediaQuery.of(context).size.width * 0.7,
             padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.2,
-                right: MediaQuery.of(context).size.width * 0.2),
+                left: MediaQuery.of(context).size.width * 0.1,
+                right: MediaQuery.of(context).size.width * 0.1),
             child: Column(
               children: [
+                // User ID Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Text('User ID: ',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ),
+                    Expanded(flex: 2, child: Text(_userId)),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
                 // User Name Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -133,7 +158,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                             fontWeight: FontWeight.bold,
                           )),
                     ),
-                    Container(child: Text(_userName)),
+                    Expanded(flex: 1, child: Text(_userName)),
                   ],
                 ),
                 const SizedBox(
@@ -145,99 +170,87 @@ class _ProfileDetailState extends State<ProfileDetail> {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        child: Text('User State/Division: ',
-                            style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
+                      child: Text('User State/Division: ',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-                    Container(child: Text(_userState)),
+                    Expanded(flex: 1, child: Text(_userState)),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 // User MIMU Township Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        child: Text('User MIMU Township: ',
-                            style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
+                      child: Text('User MIMU Township: ',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-                    Container(child: Text(_userTspMimu)),
+                    Expanded(flex: 1, child: Text(_userTspMimu)),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 // User EHO Township Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        child: Text('User EHO Township: ',
-                            style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
+                      child: Text('User EHO Township: ',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-                    Container(child: Text(_userTspEho)),
+                    Expanded(flex: 1, child: Text(_userTspEho)),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 // User Area Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        child: Text('User Area: ',
-                            style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
+                      child: Text('User Area: ',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-                    Container(child: Text(_userArea)),
+                    Expanded(flex: 1, child: Text(_userArea)),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 // User Region Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        child: Text('User Region: ',
-                            style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
+                      child: Text('User Region: ',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-                    Container(child: Text(_userRegion)),
+                    Expanded(flex: 1, child: Text(_userRegion)),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 // User Village Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        child: Text('User Village: ',
-                            style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
+                      child: Text('User Village: ',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
-                    Container(child: Text(_userVil)),
+                    Expanded(flex: 1, child: Text(_userVil)),
                   ],
                 ),
                 const SizedBox(height: 20.0),
@@ -291,23 +304,63 @@ class _ProfileDetailState extends State<ProfileDetail> {
                               });
                             }
                           },
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           label: const Text('Edit User Profile')),
                     ),
                     const SizedBox(width: 20),
 
                     // Delete User Profile Button
-                    Expanded(
-                      flex: 1,
-                      child: ElevatedButton.icon(
-                          onPressed: () async {
-                            SharedPreferences preferences =
-                                await SharedPreferences.getInstance();
-                            await preferences.clear();
-                          },
-                          icon: Icon(Icons.delete_forever),
-                          label: const Text('Delete User Profile')),
-                    )
+                    if (_userName != '' ||
+                        _userState != '' ||
+                        _userTspMimu != '' ||
+                        _userTspEho != '' ||
+                        _userArea != '' ||
+                        _userRegion != '' ||
+                        _userVil != '')
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton.icon(
+                            onPressed: () async {
+                              bool confirmDelete = await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                        'စေတနာ့ဝန်ထမ်း အချက်အလက်များ ဖျက်ပစ်ရန် သေချာပါသလား?',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                            child: const Text('Cancel')),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(true);
+                                            },
+                                            child: const Text('OK'))
+                                      ],
+                                    );
+                                  });
+                              if (confirmDelete == true) {
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                await preferences.clear();
+                                setState(() {
+                                  _userName = '';
+                                  _userState = '';
+                                  _userTspMimu = '';
+                                  _userTspEho = '';
+                                  _userArea = '';
+                                  _userRegion = '';
+                                  _userVil = '';
+                                });
+                              }
+                            },
+                            icon: Icon(Icons.delete_forever),
+                            label: const Text('Delete User Profile')),
+                      )
                   ],
                 ),
               ],

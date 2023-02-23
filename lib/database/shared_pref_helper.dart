@@ -2,6 +2,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 //this helper class is for retrieving and updating data to Shared Preferences
 class SharedPrefHelper {
+  //retrieve userId from shared preferences
+  static Future<String?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userId');
+  }
+
   //retrieve username from shared preferences
   static Future<String?> getUserName() async {
     final prefs = await SharedPreferences.getInstance();

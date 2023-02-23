@@ -133,6 +133,48 @@ class _MalariaDetailState extends State<MalariaDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // Start of Delete FAB
+        floatingActionButton: SizedBox(
+          width: 100,
+          height: 50,
+          child: FloatingActionButton(
+            shape: const BeveledRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(1))),
+            heroTag: "btnDel",
+            onPressed: () async {
+              bool confirmDelete = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        title: const Text('Confirm Delete'),
+                        content: const Text('Are you sure you want to delete?'),
+                        actions: <Widget>[
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: const Text('Cancel')),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                              child: const Text('OK'))
+                        ]);
+                  });
+              if (confirmDelete == true) {
+                DatabaseHelper().deleteMalaria(id!);
+                Navigator.pop(context, 'success');
+              }
+            },
+            child: Row(
+              children: const [
+                SizedBox(width: 10),
+                Icon(Icons.delete),
+                Text('Delete')
+              ],
+            ),
+          ),
+        ),
         appBar: AppBar(title: const Text('Record Detail')),
         body: SingleChildScrollView(
           child: Column(
@@ -503,43 +545,10 @@ class _MalariaDetailState extends State<MalariaDetail> {
                         Expanded(flex: 1, child: Text(usrName ?? '')),
                       ],
                     ), // End of User Name
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ]),
-                ),
-              ),
-              // Delete Record Button
-              Container(
-                margin: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    bool confirmDelete = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Confirm Delete'),
-                            content:
-                                const Text('Are you sure you want to delete?'),
-                            actions: <Widget>[
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                  child: const Text('Cancel')),
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                              )
-                            ],
-                          );
-                        });
-                    if (confirmDelete == true) {
-                      DatabaseHelper().deleteMalaria(id!);
-                      Navigator.pop(context, 'success');
-                    }
-                  },
-                  icon: const Icon(Icons.delete_forever),
-                  label: const Text('Delete'),
                 ),
               ),
             ],

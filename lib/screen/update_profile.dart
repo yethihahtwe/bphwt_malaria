@@ -2,6 +2,7 @@ import 'package:bphwt/widgets/state_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
+import 'package:uuid/uuid.dart';
 import '../database/shared_pref_helper.dart';
 
 class UpdateProfile extends StatefulWidget {
@@ -44,6 +45,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   String _selectedTspMimu = '';
   String _selectedTspEho = '';
   String _selectedVil = '';
+  String _userId = '';
   GlobalKey<FormState> _key = GlobalKey();
 
 // Future to load existing data into dropdown
@@ -52,6 +54,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
 // Future to save data
   Future<void> updateProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', _userId);
     await prefs.setString('userName', _userNameController.text);
     await prefs.setString('userArea', _userAreaController.text);
     await prefs.setString('userRegion', _userRegionController.text);
@@ -65,6 +68,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   @override
   void initState() {
     super.initState();
+
     // Load existing user name
     SharedPrefHelper.getUserName().then((name) {
       print('UserName: $name');
@@ -121,244 +125,269 @@ class _UpdateProfileState extends State<UpdateProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Profile'),
+        title: const Text('Update Profile'),
       ),
       body: Form(
         key: _key,
-        child: ListView(
-          padding: const EdgeInsets.all(15),
-          children: [
-            // Start of User Name Form Fields
-            const Text('User Name:'),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _userNameController,
-              validator: (str) {
-                if (str == null || str.isEmpty) {
-                  return 'Please Enter User Name';
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * 0.05,
+              right: MediaQuery.of(context).size.width * 0.05),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              // Start of User Name Form Fields
+              const Text('User Name:'),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: _userNameController,
+                validator: (str) {
+                  if (str == null || str.isEmpty) {
+                    return 'Please Enter User Name';
+                  }
+                  return null;
+                },
+                onSaved: (str) {
+                  _userNameController.text = str!;
+                },
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.person),
+                  hintText: 'Enter User Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 10.0),
+
+              //Start of State/Division Form Fields
+              const Text('User State/Division:'),
+              const SizedBox(
+                height: 10.0,
+              ),
+
+              FormHelper.dropDownWidget(context, "Select State/Division",
+                  this.stateId, this.stateList, (onChangedVal) {
+                this.stateId = onChangedVal;
+                // Assign onChangedVal to _selectedState to save to shared pref
+                _selectedState = stateList
+                    .where((state) => state["id"].toString() == onChangedVal)
+                    .first["stateName"]
+                    .toString();
+                print("Selected State: $onChangedVal");
+                // Set MIMU Township List according to State Value
+                this.tspMimuList = this
+                    .tspMimuMasterList
+                    .where((tspMimuListItem) =>
+                        tspMimuListItem["ParentId"].toString() ==
+                        onChangedVal.toString())
+                    .toList();
+                this.tspMimuId = null;
+                // Set EHO Township List according to State Value
+                this.tspEhoList = this
+                    .tspEhoMasterList
+                    .where((tspEhoListItem) =>
+                        tspEhoListItem["ParentId"].toString() ==
+                        onChangedVal.toString())
+                    .toList();
+                this.tspEhoId = null;
+                setState(() {});
+              }, (onValidateVal) {
+                if (onValidateVal == null) {
+                  return 'Please select State/Division';
                 }
                 return null;
               },
-              onSaved: (str) {
-                _userNameController.text = str!;
-              },
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.person),
-                hintText: 'Enter User Name',
-                border: OutlineInputBorder(),
+                  borderColor: Colors.grey,
+                  borderFocusColor: Colors.grey,
+                  borderRadius: 5,
+                  optionValue: "id",
+                  optionLabel: "stateName",
+                  paddingLeft: 0,
+                  paddingRight: 0),
+
+              SizedBox(height: 10.0),
+
+              // Start of MIMU Township Form Field
+              const Text('User MIMU Township:'),
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(height: 10.0),
+              FormHelper.dropDownWidget(context, "Select MIMU Township",
+                  this.tspMimuId, this.tspMimuList, (onChangedVal) {
+                this.tspMimuId = onChangedVal;
+                // Assign onChangedVal to _selectedTspMimu to save to shared pref
+                _selectedTspMimu = tspMimuMasterList
+                    .where(
+                        (tspmimu) => tspmimu["ID"].toString() == onChangedVal)
+                    .first["Name"]
+                    .toString();
+                print("Selected TspMimu: $onChangedVal");
 
-            //Start of State/Division Form Fields
-            const Text('User State/Division:'),
-            SizedBox(
-              height: 10.0,
-            ),
-
-            FormHelper.dropDownWidget(
-                context, "Select State/Division", this.stateId, this.stateList,
-                (onChangedVal) {
-              this.stateId = onChangedVal;
-              // Assign onChangedVal to _selectedState to save to shared pref
-              _selectedState = stateList
-                  .where((state) => state["id"].toString() == onChangedVal)
-                  .first["stateName"]
-                  .toString();
-              print("Selected State: $onChangedVal");
-              // Set MIMU Township List according to State Value
-              this.tspMimuList = this
-                  .tspMimuMasterList
-                  .where((tspMimuListItem) =>
-                      tspMimuListItem["ParentId"].toString() ==
-                      onChangedVal.toString())
-                  .toList();
-              this.tspMimuId = null;
-              // Set EHO Township List according to State Value
-              this.tspEhoList = this
-                  .tspEhoMasterList
-                  .where((tspEhoListItem) =>
-                      tspEhoListItem["ParentId"].toString() ==
-                      onChangedVal.toString())
-                  .toList();
-              this.tspEhoId = null;
-              setState(() {});
-            }, (onValidateVal) {
-              if (onValidateVal == null) {
-                return 'Please select State/Division';
-              }
-              return null;
-            },
-                borderColor: Theme.of(context).primaryColor,
-                borderFocusColor: Theme.of(context).primaryColor,
-                borderRadius: 10,
-                optionValue: "id",
-                optionLabel: "stateName"),
-
-            SizedBox(height: 10.0),
-
-            // Start of MIMU Township Form Field
-            const Text('User MIMU Township:'),
-            const SizedBox(
-              height: 10,
-            ),
-            FormHelper.dropDownWidget(context, "Select MIMU Township",
-                this.tspMimuId, this.tspMimuList, (onChangedVal) {
-              this.tspMimuId = onChangedVal;
-              // Assign onChangedVal to _selectedTspMimu to save to shared pref
-              _selectedTspMimu = tspMimuMasterList
-                  .where((tspmimu) => tspmimu["ID"].toString() == onChangedVal)
-                  .first["Name"]
-                  .toString();
-              print("Selected TspMimu: $onChangedVal");
-
-              // Set Village List according to MIMU Township Value
-              this.vilList = this
-                  .vilMasterList
-                  .where((vilListItem) =>
-                      vilListItem["ParentId"].toString() ==
-                      onChangedVal.toString())
-                  .toList();
-              this.vilId = null;
-              setState(() {});
-            }, (onValidateVal) {
-              if (onValidateVal == null) {
-                return 'Please select MIMU Township';
-              }
-              return null;
-            },
-                borderColor: Theme.of(context).primaryColor,
-                borderFocusColor: Theme.of(context).primaryColor,
-                borderRadius: 10,
-                optionValue: "ID",
-                optionLabel: "Name"),
-            SizedBox(height: 10),
-
-            // Start of EHO Township Form Field
-            const Text("EHO Township"),
-            SizedBox(
-              height: 10.0,
-            ),
-            FormHelper.dropDownWidget(
-                context, "Select EHO Township", this.tspEhoId, this.tspEhoList,
-                (onChangedVal) {
-              this.tspEhoId = onChangedVal;
-              // Assign onChangedVal to _selectedTspEho to save to shared pref
-              _selectedTspEho = tspEhoMasterList
-                  .where((tspeho) => tspeho["ID"].toString() == onChangedVal)
-                  .first["Name"]
-                  .toString();
-              print("Selected TspEho: $onChangedVal");
-              setState(() {});
-            }, (onValidateVal) {
-              if (onValidateVal == null) {
-                return 'Please select EHO Township';
-              }
-              return null;
-            },
-                borderColor: Theme.of(context).primaryColor,
-                borderFocusColor: Theme.of(context).primaryColor,
-                borderRadius: 10,
-                optionValue: "ID",
-                optionLabel: "Name"),
-            const SizedBox(
-              height: 10,
-            ),
-
-            // Start of User Area Form Fields
-            const Text('User Area:'),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _userAreaController,
-              validator: (str) {
-                if (str == null || str.isEmpty) {
-                  return 'Please Enter User Area';
+                // Set Village List according to MIMU Township Value
+                this.vilList = this
+                    .vilMasterList
+                    .where((vilListItem) =>
+                        vilListItem["ParentId"].toString() ==
+                        onChangedVal.toString())
+                    .toList();
+                this.vilId = null;
+                setState(() {});
+              }, (onValidateVal) {
+                if (onValidateVal == null) {
+                  return 'Please select MIMU Township';
                 }
                 return null;
               },
-              onSaved: (str) {
-                _userAreaController.text = str!;
-              },
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.add_location),
-                hintText: 'Enter User Area',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10.0),
+                  borderColor: Colors.grey,
+                  borderFocusColor: Colors.grey,
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  borderRadius: 5,
+                  optionValue: "ID",
+                  optionLabel: "Name"),
+              const SizedBox(height: 10),
 
-            // Start of User Region Form Fields
-            const Text('User Region:'),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _userRegionController,
-              validator: (str) {
-                if (str == null || str.isEmpty) {
-                  return 'Please Enter User Region';
+              // Start of EHO Township Form Field
+              const Text("EHO Township"),
+              const SizedBox(
+                height: 10.0,
+              ),
+              FormHelper.dropDownWidget(context, "Select EHO Township",
+                  this.tspEhoId, this.tspEhoList, (onChangedVal) {
+                this.tspEhoId = onChangedVal;
+                // Assign onChangedVal to _selectedTspEho to save to shared pref
+                _selectedTspEho = tspEhoMasterList
+                    .where((tspeho) => tspeho["ID"].toString() == onChangedVal)
+                    .first["Name"]
+                    .toString();
+                print("Selected TspEho: $onChangedVal");
+                setState(() {});
+              }, (onValidateVal) {
+                if (onValidateVal == null) {
+                  return 'Please select EHO Township';
                 }
                 return null;
               },
-              onSaved: (str) {
-                _userRegionController.text = str!;
-              },
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.explore_rounded),
-                hintText: 'Enter User Region',
-                border: OutlineInputBorder(),
+                  borderColor: Colors.grey,
+                  borderFocusColor: Colors.grey,
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  borderRadius: 5,
+                  optionValue: "ID",
+                  optionLabel: "Name"),
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(height: 10.0),
 
-            // Start of Village Form Field
-            const Text("User Village"),
-            SizedBox(
-              height: 10.0,
-            ),
-            FormHelper.dropDownWidget(
-                context, "Select Village", this.vilId, this.vilList,
-                (onChangedVal) {
-              this.vilId = onChangedVal;
-              // Assign onChangedVal to _selectedVil to save to shared pref
-              _selectedVil = vilMasterList
-                  .where((vil) => vil["ID"].toString() == onChangedVal)
-                  .first["Name"]
-                  .toString();
-              print("Selected vil: $onChangedVal");
-              setState(() {});
-            }, (onValidateVal) {
-              if (onValidateVal == null) {
-                return 'Please select Village';
-              }
-              return null;
-            },
-                borderColor: Theme.of(context).primaryColor,
-                borderFocusColor: Theme.of(context).primaryColor,
-                borderRadius: 10,
-                optionValue: "ID",
-                optionLabel: "Name"),
-            const SizedBox(
-              height: 10,
-            ),
-            // Start of Save Button
-            ElevatedButton.icon(
-              onPressed: () async {
-                if (_key.currentState != null &&
-                    _key.currentState!.validate()) {
-                  _key.currentState?.save();
-                  await updateProfile();
-                  Navigator.pop(context, 'success');
+              // Start of User Area Form Fields
+              const Text('User Area:'),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: _userAreaController,
+                validator: (str) {
+                  if (str == null || str.isEmpty) {
+                    return 'Please Enter User Area';
+                  }
+                  return null;
+                },
+                onSaved: (str) {
+                  _userAreaController.text = str!;
+                },
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.add_location),
+                  hintText: 'Enter User Area',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 10.0),
+
+              // Start of User Region Form Fields
+              const Text('User Region:'),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: _userRegionController,
+                validator: (str) {
+                  if (str == null || str.isEmpty) {
+                    return 'Please Enter User Region';
+                  }
+                  return null;
+                },
+                onSaved: (str) {
+                  _userRegionController.text = str!;
+                },
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.explore_rounded),
+                  hintText: 'Enter User Region',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 10.0),
+
+              // Start of Village Form Field
+              const Text("User Village"),
+              const SizedBox(
+                height: 10.0,
+              ),
+              FormHelper.dropDownWidget(
+                  context, "Select Village", this.vilId, this.vilList,
+                  (onChangedVal) {
+                this.vilId = onChangedVal;
+                // Assign onChangedVal to _selectedVil to save to shared pref
+                _selectedVil = vilMasterList
+                    .where((vil) => vil["ID"].toString() == onChangedVal)
+                    .first["Name"]
+                    .toString();
+                setState(() {});
+              }, (onValidateVal) {
+                if (onValidateVal == null) {
+                  return 'Please select Village';
                 }
+                return null;
               },
-              icon: const Icon(Icons.save),
-              label: const Text('Save'),
-            ),
-          ],
+                  borderColor: Colors.grey,
+                  borderFocusColor: Colors.grey,
+                  borderRadius: 5,
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  optionValue: "ID",
+                  optionLabel: "Name"),
+              const SizedBox(
+                height: 10,
+              ),
+              // Start of Save Button
+              SizedBox(
+                width: 200,
+                height: 45,
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    if (_key.currentState != null &&
+                        _key.currentState!.validate()) {
+                      _key.currentState?.save();
+                      setState(() {
+                        const uuid = Uuid();
+                        _userId = uuid.v4();
+                      });
+                      await updateProfile();
+                      Navigator.pop(context, 'success');
+                    }
+                  },
+                  icon: const Icon(Icons.save),
+                  label: const Text('Save'),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              )
+            ],
+          ),
         ),
       ),
     );

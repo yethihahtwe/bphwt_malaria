@@ -1,10 +1,6 @@
-import 'dart:io';
 import 'package:path/path.dart';
 import 'dart:async';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import '../model/malaria.dart';
 
 class DatabaseHelper {
   late Database _db;
@@ -22,7 +18,7 @@ class DatabaseHelper {
 
 //CREATE MALARIA TABLE
     await _db.execute(
-        'CREATE TABLE IF NOT EXISTS $malariaTable(id INTEGER PRIMARY KEY, rx_month TEXT, rx_year TEXT, test_date TEXT, name TEXT, age TEXT, address TEXT, sex TEXT, pregnancy TEXT, rdt_bool TEXT, rdt_pos_result TEXT, symptom TEXT, medicine TEXT, medicine_amount TEXT, refer TEXT, death TEXT, receive_rx TEXT, travel TEXT, job TEXT, other_job TEXT, remark TEXT, state TEXT, tsp_mimu TEXT, tsp_eho TEXT, area TEXT, region TEXT, vil TEXT, usr_name TEXT)');
+        'CREATE TABLE IF NOT EXISTS $malariaTable(id INTEGER PRIMARY KEY, rx_month TEXT, rx_year TEXT, test_date TEXT, name TEXT, age TEXT, address TEXT, sex TEXT, pregnancy TEXT, rdt_bool TEXT, rdt_pos_result TEXT, symptom TEXT, act24 TEXT, act24_amount TEXT, act18 TEXT, act18_amount TEXT, act12 TEXT, act12_amount TEXT, act6 TEXT, act6_amount TEXT, chloroquine TEXT, chloroquine_amount TEXT, primaquine TEXT, primaquine_amount TEXT, refer TEXT, death TEXT, receive_rx TEXT, travel TEXT, job TEXT, other_job TEXT, remark TEXT, state TEXT, tsp_mimu TEXT, tsp_eho TEXT, area TEXT, region TEXT, vil TEXT, usr_name TEXT, usr_id TEXT)');
     return _db;
   }
 

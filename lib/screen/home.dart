@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  SynchronizationData _synchronizationData = SynchronizationData();
+  final SynchronizationData _synchronizationData = SynchronizationData();
 
   @override
   void initState() {

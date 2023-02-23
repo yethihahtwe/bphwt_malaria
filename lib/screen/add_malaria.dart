@@ -1,4 +1,5 @@
 import 'package:bphwt/database/shared_pref_helper.dart';
+import 'package:bphwt/screen/update_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import '../database/database_helper.dart';
@@ -12,7 +13,7 @@ class AddMalaria extends StatefulWidget {
 }
 
 class _AddMalariaState extends State<AddMalaria> {
-  GlobalKey<FormState> _key = GlobalKey();
+  final GlobalKey<FormState> _key = GlobalKey();
 //String to save to table
   String? name,
       age,
@@ -21,9 +22,20 @@ class _AddMalariaState extends State<AddMalaria> {
       selectedYear,
       rdtPosType,
       symptomType,
-      medicine,
-      selectedMedicine,
-      medicineAmount,
+      // medicine,
+      act24,
+      act24Amount,
+      act18,
+      act18Amount,
+      act12,
+      act12Amount,
+      act6,
+      act6Amount,
+      chloroquine,
+      chloroquineAmount,
+      primaquine,
+      primaquineAmount,
+      // medicineAmount,
       receivedRx,
       selectedJob,
       otherJob,
@@ -37,6 +49,7 @@ class _AddMalariaState extends State<AddMalaria> {
   String userArea = '';
   String userRegion = '';
   String userVil = '';
+  String userId = '';
   DateTime? date;
 
   //String to display date in date picker button
@@ -100,16 +113,6 @@ class _AddMalariaState extends State<AddMalaria> {
     'အခြားလုပ်ငန်း'
   ];
 
-  // Items for Antimalarial Dropdown
-  final medicineListItems = [
-    'ACT-24 (အေစီတီ-၂၄)',
-    'ACT-18 (အေစီတီ-၁၈)',
-    'ACT-12 (အေစီတီ-၁၂)',
-    'ACT-6 (အေစီတီ-၆)',
-    'Chloriquine (ကလိုရိုကွင်း)',
-    'Primaquine (ပရိုင်မာကွင်း)'
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -142,47 +145,52 @@ class _AddMalariaState extends State<AddMalaria> {
     this.yearList.add({"id": 12, "yearName": "2034"});
 
     //Get values from Shared Preferences
-    //Get User Name if present
+    // Get User ID if present
+    SharedPrefHelper.getUserId().then((id) {
+      setState(() {
+        userId = id ?? '';
+      });
+    });
     // Get User Name if present
     SharedPrefHelper.getUserName().then((name) {
       setState(() {
-        userName = name ?? 'Please Update';
+        userName = name ?? '';
       });
     });
     // Get User State if present
     SharedPrefHelper.getUserState().then((state) {
       setState(() {
-        userState = state ?? 'Please Update';
+        userState = state ?? '';
       });
     });
     // Get User MIMU Township if present
     SharedPrefHelper.getUserTspMimu().then((tspmimu) {
       setState(() {
-        userTspMimu = tspmimu ?? 'Please Update';
+        userTspMimu = tspmimu ?? '';
       });
     });
     // Get User EHO Township if present
     SharedPrefHelper.getUserTspEho().then((tspeho) {
       setState(() {
-        userTspEho = tspeho ?? 'Please Update';
+        userTspEho = tspeho ?? '';
       });
     });
     // Get User Area if present
     SharedPrefHelper.getUserArea().then((area) {
       setState(() {
-        userArea = area ?? 'Please Update';
+        userArea = area ?? '';
       });
     });
     // Get User Region if present
     SharedPrefHelper.getUserRegion().then((region) {
       setState(() {
-        userRegion = region ?? 'Please Update';
+        userRegion = region ?? '';
       });
     });
     // Get User Village if present
     SharedPrefHelper.getUserVil().then((vil) {
       setState(() {
-        userVil = vil ?? 'Please Update';
+        userVil = vil ?? '';
       });
     });
   }
@@ -445,7 +453,18 @@ class _AddMalariaState extends State<AddMalaria> {
                                       isRdtPositive = false;
                                       rdtPosType = null;
                                       symptomType = null;
-                                      medicine = null;
+                                      act24 = null;
+                                      act24Amount = null;
+                                      act18 = null;
+                                      act18Amount = null;
+                                      act12 = null;
+                                      act12Amount = null;
+                                      act6 = null;
+                                      act6Amount = null;
+                                      chloroquine = null;
+                                      chloroquineAmount = null;
+                                      primaquine = null;
+                                      primaquineAmount = null;
                                       isReferred = false;
                                       isDeath = false;
                                       receivedRx = null;
@@ -532,60 +551,200 @@ class _AddMalariaState extends State<AddMalaria> {
                             ])), // End of Symptoms
                   // Start of Treatment
                   if (isRdtPositive)
-                    SizedBox(
-                      height: 120,
-                      child: ListView(
-                        physics: const NeverScrollableScrollPhysics(),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Divider(),
                           const Text(
                               'Antimalaria prescribed/ ကုသပေးသည့်ငှက်ဖျားဆေး'),
-                          DropdownButtonFormField<String>(
-                              value: selectedMedicine,
-                              decoration: const InputDecoration(
-                                prefixIcon: Icon(Icons.medication_rounded),
-                                border: OutlineInputBorder(),
-                                contentPadding:
-                                    EdgeInsets.only(top: 5, bottom: 5),
-                              ),
-                              hint: const Text('Please select medicine'),
-                              items: medicineListItems
-                                  .map(buildMedicineListMenuItem)
-                                  .toList(),
-                              onChanged: (medicine) => setState(() {
-                                    selectedMedicine = medicine;
+                          // Start of ACT-24
+                          RadioListTile(
+                              toggleable: true,
+                              value: 'true',
+                              groupValue: act24,
+                              title: const Text('ACT-24 (အေစီတီ-၂၄)'),
+                              onChanged: (toggle) => setState(() {
+                                    act24 = toggle;
                                   })),
-                        ],
-                      ),
-                    ), // End of Antimalaria Dropdown
-                  // Start of Medicine Amount
-                  if (isRdtPositive)
-                    const Text('Amount prescribed\nဆေးလုံးအရေအတွက်'),
-                  if (isRdtPositive)
-                    FormHelper.inputFieldWidget(
-                        showPrefixIcon: true,
-                        prefixIcon: const Icon(Icons.numbers),
-                        prefixIconColor: Colors.grey,
-                        borderColor: Colors.grey,
-                        borderFocusColor: Colors.grey,
-                        borderWidth: 1,
-                        focusedBorderWidth: 1,
-                        borderRadius: 5,
-                        context,
-                        medicineAmount ?? '',
-                        'Amount',
-                        isNumeric: true,
-                        paddingLeft: 0,
-                        paddingRight: 0, (onValidateVal) {
-                      if (onValidateVal == null) {
-                        return 'Please enter amount';
-                      }
-                      return null;
-                    }, (onSavedVal) {
-                      setState(() {
-                        medicineAmount = onSavedVal;
-                      });
-                    }), // End of Medicine Amount
+                          if (act24 == 'true')
+                            const Text('ACT-24 ဆေးလုံးအရေအတွက်'),
+                          if (act24 == 'true')
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(fontSize: 15),
+                              validator: (str) {
+                                if (str == null || str.isEmpty) {
+                                  return 'Please enter ACT-24 amount';
+                                }
+                                return null;
+                              },
+                              onSaved: (str) {
+                                act24Amount = str;
+                              },
+                              decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.medication_sharp),
+                                  hintText: 'Enter ACT-24 Amount',
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.only(top: 5, bottom: 5)),
+                            ), // End of ACT-24
+                          // Start of ACT-18
+                          RadioListTile(
+                              toggleable: true,
+                              value: 'true',
+                              groupValue: act18,
+                              title: const Text('ACT-18 (အေစီတီ-၁၈)'),
+                              onChanged: (toggle) => setState(() {
+                                    act18 = toggle;
+                                  })),
+                          if (act18 == 'true')
+                            const Text('ACT-18 ဆေးလုံးအရေအတွက်'),
+                          if (act18 == 'true')
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(fontSize: 15),
+                              validator: (str) {
+                                if (str == null || str.isEmpty) {
+                                  return 'Please enter ACT-18 amount';
+                                }
+                                return null;
+                              },
+                              onSaved: (str) {
+                                act18Amount = str;
+                              },
+                              decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.medication_sharp),
+                                  hintText: 'Enter ACT-18 Amount',
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.only(top: 5, bottom: 5)),
+                            ), // End of ACT-18
+                          // Start of ACT-12
+                          RadioListTile(
+                              toggleable: true,
+                              value: 'true',
+                              groupValue: act12,
+                              title: const Text('ACT-12 (အေစီတီ-၁၂)'),
+                              onChanged: (toggle) => setState(() {
+                                    act12 = toggle;
+                                  })),
+                          if (act12 == 'true')
+                            const Text('ACT-12 ဆေးလုံးအရေအတွက်'),
+                          if (act12 == 'true')
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(fontSize: 15),
+                              validator: (str) {
+                                if (str == null || str.isEmpty) {
+                                  return 'Please enter ACT-12 amount';
+                                }
+                                return null;
+                              },
+                              onSaved: (str) {
+                                act12Amount = str;
+                              },
+                              decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.medication_sharp),
+                                  hintText: 'Enter ACT-12 Amount',
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.only(top: 5, bottom: 5)),
+                            ), // End of ACT-12
+                          // Start of ACT-6
+                          RadioListTile(
+                              toggleable: true,
+                              value: 'true',
+                              groupValue: act6,
+                              title: const Text('ACT-6 (အေစီတီ-၆)'),
+                              onChanged: (toggle) => setState(() {
+                                    act6 = toggle;
+                                  })),
+                          if (act6 == 'true')
+                            const Text('ACT-6 ဆေးလုံးအရေအတွက်'),
+                          if (act6 == 'true')
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(fontSize: 15),
+                              validator: (str) {
+                                if (str == null || str.isEmpty) {
+                                  return 'Please enter ACT-6 amount';
+                                }
+                                return null;
+                              },
+                              onSaved: (str) {
+                                act6Amount = str;
+                              },
+                              decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.medication_sharp),
+                                  hintText: 'Enter ACT-6 Amount',
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.only(top: 5, bottom: 5)),
+                            ), // End of ACT-6
+                          // Start of Chloroquine
+                          RadioListTile(
+                              toggleable: true,
+                              value: 'true',
+                              groupValue: chloroquine,
+                              title: const Text('Chloroquine (ကလိုရိုကွင်း)'),
+                              onChanged: (toggle) => setState(() {
+                                    chloroquine = toggle;
+                                  })),
+                          if (chloroquine == 'true')
+                            const Text('Chloroquine ဆေးလုံးအရေအတွက်'),
+                          if (chloroquine == 'true')
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(fontSize: 15),
+                              validator: (str) {
+                                if (str == null || str.isEmpty) {
+                                  return 'Please enter Chloroquine amount';
+                                }
+                                return null;
+                              },
+                              onSaved: (str) {
+                                chloroquineAmount = str;
+                              },
+                              decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.medication_sharp),
+                                  hintText: 'Enter Chloroquine Amount',
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.only(top: 5, bottom: 5)),
+                            ), // End of Chloroquine
+                          // Start of Primaquine
+                          RadioListTile(
+                              toggleable: true,
+                              value: 'true',
+                              groupValue: primaquine,
+                              title: const Text('Primaquine (ပရိုင်မာကွင်း)'),
+                              onChanged: (toggle) => setState(() {
+                                    primaquine = toggle;
+                                  })),
+                          if (primaquine == 'true')
+                            const Text('Primaquine ဆေးလုံးအရေအတွက်'),
+                          if (primaquine == 'true')
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(fontSize: 15),
+                              validator: (str) {
+                                if (str == null || str.isEmpty) {
+                                  return 'Please enter Primaquine amount';
+                                }
+                                return null;
+                              },
+                              onSaved: (str) {
+                                primaquineAmount = str;
+                              },
+                              decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.medication_sharp),
+                                  hintText: 'Enter Primaquine Amount',
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.only(top: 5, bottom: 5)),
+                            ),
+                        ]), // End of Antimalaria Dropdown
+
                   // Start of Referred Checkbox
                   if (isRdtPositive) const Divider(),
                   if (isRdtPositive)
@@ -719,7 +878,7 @@ class _AddMalariaState extends State<AddMalaria> {
                   // Start of Remark
                   if (isRdtPositive)
                     SizedBox(
-                      height: 110,
+                      height: 120,
                       child: ListView(
                         physics: NeverScrollableScrollPhysics(),
                         children: [
@@ -730,7 +889,7 @@ class _AddMalariaState extends State<AddMalaria> {
                             decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.list),
                               border: OutlineInputBorder(),
-                              hintText: 'Enter remark if any',
+                              hintText: 'မှတ်ချက်ရှိပါက ဖြည့်သွင်းပါရန်',
                             ),
                             onSaved: (enteredRemark) {
                               setState(() {
@@ -823,7 +982,14 @@ class _AddMalariaState extends State<AddMalaria> {
                   ElevatedButton.icon(
                       onPressed: () async {
                         if (_key.currentState != null &&
-                            _key.currentState!.validate()) {
+                            _key.currentState!.validate() &&
+                            (userName != '' ||
+                                userState != '' ||
+                                userTspMimu != '' ||
+                                userTspEho != '' ||
+                                userArea != '' ||
+                                userRegion != '' ||
+                                userVil != '')) {
                           _key.currentState?.save();
                           int id = await DatabaseHelper().insertMalaria(
                               Malaria.insertMalaria(
@@ -838,8 +1004,18 @@ class _AddMalariaState extends State<AddMalaria> {
                                   rdtBool: rdtResult,
                                   rdtPosResult: rdtPosType ?? '',
                                   symptom: symptomType ?? '',
-                                  medicine: selectedMedicine ?? '',
-                                  medicineAmount: medicineAmount ?? '',
+                                  act24: act24 ?? '',
+                                  act24Amount: act24Amount ?? '',
+                                  act18: act18 ?? '',
+                                  act18Amount: act18Amount ?? '',
+                                  act12: act12 ?? '',
+                                  act12Amount: act12Amount ?? '',
+                                  act6: act6 ?? '',
+                                  act6Amount: act6Amount ?? '',
+                                  chloroquine: chloroquine ?? '',
+                                  chloroquineAmount: chloroquineAmount ?? '',
+                                  primaquine: primaquine ?? '',
+                                  primaquineAmount: primaquineAmount ?? '',
                                   refer: isReferred.toString(),
                                   death: isDeath.toString(),
                                   receiveRx: receivedRx ?? '',
@@ -852,9 +1028,43 @@ class _AddMalariaState extends State<AddMalaria> {
                                   area: userArea,
                                   region: userRegion,
                                   vil: userVil,
-                                  usrName: userName));
+                                  usrName: userName,
+                                  usrId: userId));
                           print(id);
                           Navigator.pop(context, 'success');
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title:
+                                      const Text('Please update your profile'),
+                                  content: const Text(
+                                    'စေတနာ့ဝန်ထမ်း အချက်အလက်များ ပြည့်စုံမှုမရှိသေးပါ။ Update Profile ကိုနှိပ်၍ ဖြည့်သွင်းပါ',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Cancel')),
+                                    TextButton(
+                                        onPressed: () async {
+                                          var result = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      UpdateProfile()));
+                                          if (result == 'success') {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                        child: const Text('Update Profile'))
+                                  ],
+                                );
+                              });
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -864,7 +1074,7 @@ class _AddMalariaState extends State<AddMalaria> {
                         'Save',
                         style: TextStyle(fontSize: 16),
                       )), // End of Save Button
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   )
                 ],
