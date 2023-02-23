@@ -113,13 +113,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.4"
-  data_connection_checker:
-    dependency: "direct main"
-    description:
-      name: data_connection_checker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.4"
   dbus:
     dependency: transitive
     description:
@@ -160,6 +153,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_easyloading:
+    dependency: "direct main"
+    description:
+      name: flutter_easyloading
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.5"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -261,6 +261,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.2"
+  internet_connection_checker:
+    dependency: "direct main"
+    description:
+      name: internet_connection_checker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+1"
   intl:
     dependency: transitive
     description:

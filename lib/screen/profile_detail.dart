@@ -23,6 +23,9 @@ class _ProfileDetailState extends State<ProfileDetail> {
   String _userRegion = '';
   String _userVil = '';
 
+// Bool to check profile setup
+  bool _isComplete = true;
+
   @override
   void initState() {
     super.initState();
@@ -30,43 +33,43 @@ class _ProfileDetailState extends State<ProfileDetail> {
     // Get User Name if present
     SharedPrefHelper.getUserName().then((name) {
       setState(() {
-        _userName = name ?? 'Please Update';
+        _userName = name ?? '';
       });
     });
     // Get User State if present
     SharedPrefHelper.getUserState().then((state) {
       setState(() {
-        _userState = state ?? 'Please Update';
+        _userState = state ?? '';
       });
     });
     // Get User MIMU Township if present
     SharedPrefHelper.getUserTspMimu().then((tspmimu) {
       setState(() {
-        _userTspMimu = tspmimu ?? 'Please Update';
+        _userTspMimu = tspmimu ?? '';
       });
     });
     // Get User EHO Township if present
     SharedPrefHelper.getUserTspEho().then((tspeho) {
       setState(() {
-        _userTspEho = tspeho ?? 'Please Update';
+        _userTspEho = tspeho ?? '';
       });
     });
     // Get User Area if present
     SharedPrefHelper.getUserArea().then((area) {
       setState(() {
-        _userArea = area ?? 'Please Update';
+        _userArea = area ?? '';
       });
     });
     // Get User Region if present
     SharedPrefHelper.getUserRegion().then((region) {
       setState(() {
-        _userRegion = region ?? 'Please Update';
+        _userRegion = region ?? '';
       });
     });
     // Get User Village if present
     SharedPrefHelper.getUserVil().then((vil) {
       setState(() {
-        _userVil = vil ?? 'Please Update';
+        _userVil = vil ?? '';
       });
     });
   }
@@ -88,22 +91,35 @@ class _ProfileDetailState extends State<ProfileDetail> {
         automaticallyImplyLeading: false,
         title: Text('User Profile'),
       ),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        const SizedBox(
+          height: 20,
+        ),
         Center(
           child: Container(
               width: 200.0,
               height: 150.0,
               alignment: Alignment.topCenter,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
+                boxShadow: const [
+                  BoxShadow(
+                      color: Color.fromARGB(71, 158, 158, 158),
+                      blurRadius: 10.0,
+                      offset: Offset(0.0, 5.0))
+                ],
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(3.0),
+                borderRadius: BorderRadius.circular(5.0),
               ),
               child: Image.asset('assets/images/logo.png')),
         ),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 20.0),
         Center(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
+            // width: MediaQuery.of(context).size.width * 0.7,
+            padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.2,
+                right: MediaQuery.of(context).size.width * 0.2),
             child: Column(
               children: [
                 // User Name Row
@@ -224,65 +240,76 @@ class _ProfileDetailState extends State<ProfileDetail> {
                     Container(child: Text(_userVil)),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 // Edit User Profile Button
-                ElevatedButton.icon(
-                    onPressed: () async {
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UpdateProfile()),
-                      );
-                      if (result == 'success') {
-                        SharedPrefHelper.getUserName().then((name) {
-                          setState(() {
-                            _userName = name ?? '';
-                          });
-                        });
-                        SharedPrefHelper.getUserState().then((state) {
-                          setState(() {
-                            _userState = state ?? '';
-                          });
-                        });
-                        SharedPrefHelper.getUserTspMimu().then((tspmimu) {
-                          setState(() {
-                            _userTspMimu = tspmimu ?? '';
-                          });
-                        });
-                        SharedPrefHelper.getUserTspEho().then((tspeho) {
-                          setState(() {
-                            _userTspEho = tspeho ?? '';
-                          });
-                        });
-                        SharedPrefHelper.getUserArea().then((area) {
-                          setState(() {
-                            _userArea = area ?? '';
-                          });
-                        });
-                        SharedPrefHelper.getUserRegion().then((region) {
-                          setState(() {
-                            _userRegion = region ?? '';
-                          });
-                        });
-                        SharedPrefHelper.getUserVil().then((vil) {
-                          setState(() {
-                            _userVil = vil ?? '';
-                          });
-                        });
-                      }
-                    },
-                    icon: Icon(Icons.edit),
-                    label: const Text('Edit User Profile')),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: ElevatedButton.icon(
+                          onPressed: () async {
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UpdateProfile()),
+                            );
+                            if (result == 'success') {
+                              SharedPrefHelper.getUserName().then((name) {
+                                setState(() {
+                                  _userName = name ?? '';
+                                });
+                              });
+                              SharedPrefHelper.getUserState().then((state) {
+                                setState(() {
+                                  _userState = state ?? '';
+                                });
+                              });
+                              SharedPrefHelper.getUserTspMimu().then((tspmimu) {
+                                setState(() {
+                                  _userTspMimu = tspmimu ?? '';
+                                });
+                              });
+                              SharedPrefHelper.getUserTspEho().then((tspeho) {
+                                setState(() {
+                                  _userTspEho = tspeho ?? '';
+                                });
+                              });
+                              SharedPrefHelper.getUserArea().then((area) {
+                                setState(() {
+                                  _userArea = area ?? '';
+                                });
+                              });
+                              SharedPrefHelper.getUserRegion().then((region) {
+                                setState(() {
+                                  _userRegion = region ?? '';
+                                });
+                              });
+                              SharedPrefHelper.getUserVil().then((vil) {
+                                setState(() {
+                                  _userVil = vil ?? '';
+                                });
+                              });
+                            }
+                          },
+                          icon: Icon(Icons.edit),
+                          label: const Text('Edit User Profile')),
+                    ),
+                    const SizedBox(width: 20),
 
-                // Delete User Profile Button
-                ElevatedButton.icon(
-                    onPressed: () async {
-                      SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                      await preferences.clear();
-                    },
-                    icon: Icon(Icons.delete_forever),
-                    label: const Text('Delete User Profile'))
+                    // Delete User Profile Button
+                    Expanded(
+                      flex: 1,
+                      child: ElevatedButton.icon(
+                          onPressed: () async {
+                            SharedPreferences preferences =
+                                await SharedPreferences.getInstance();
+                            await preferences.clear();
+                          },
+                          icon: Icon(Icons.delete_forever),
+                          label: const Text('Delete User Profile')),
+                    )
+                  ],
+                ),
               ],
             ),
           ),

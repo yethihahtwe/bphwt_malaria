@@ -40,7 +40,6 @@ dependencies:
   path: ^1.8.2
   connectivity_plus: ^3.0.3
   http: ^0.13.5
-  data_connection_checker: ^0.3.4
   google_fonts: ^4.0.3
   shared_preferences: ^2.0.17
   dropdown_search2: ^1.0.2
@@ -50,6 +49,8 @@ dependencies:
   intl_utils: ^2.8.1
   package_info: ^2.0.2
   snippet_coder_utils: ^1.0.13
+  internet_connection_checker: ^1.0.0+1
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:

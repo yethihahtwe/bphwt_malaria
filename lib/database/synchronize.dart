@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:bphwt/database/database_helper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SynchronizationData {
   static Future<bool> isInternet() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
-      if (await DataConnectionChecker().hasConnection) {
+      if (await InternetConnectionChecker().hasConnection) {
         print("Mobile data and internet connection available.");
         return true;
       } else {
@@ -17,7 +17,7 @@ class SynchronizationData {
         return false;
       }
     } else if (connectivityResult == ConnectivityResult.wifi) {
-      if (await DataConnectionChecker().hasConnection) {
+      if (await InternetConnectionChecker().hasConnection) {
         print('wifi data and internet connection available');
         return true;
       } else {
